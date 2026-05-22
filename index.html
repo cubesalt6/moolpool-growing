@@ -35,11 +35,9 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .tag-chip:hover .del-btn{display:inline;}
 .tag-chip .del-btn:hover{opacity:1;}
 .new-tag-form{display:flex;align-items:center;gap:6px;}
-.new-tag-input{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--t1);font-family:var(--font);width:130px;outline:none;}
-.new-tag-input:focus{border-color:rgba(0,0,0,0.28);}
-.new-tag-input::placeholder{color:var(--t3);}
-.icon-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);font-size:14px;transition:background .1s;}
+.icon-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;height:28px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);font-size:14px;transition:background .1s;padding:0 10px;gap:5px;}
 .icon-btn:hover{background:var(--bg4);color:var(--t1);}
+.icon-btn span{font-size:11px;}
 
 /* entry */
 .entry-area{display:flex;flex-direction:column;gap:11px;}
@@ -48,7 +46,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .time-input{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;font-family:var(--mono);font-size:14px;color:var(--t1);width:86px;outline:none;text-align:center;}
 .time-input:focus{border-color:rgba(0,0,0,0.3);}
 .time-sep{color:var(--t3);font-family:var(--mono);}
-.add-btn{background:var(--t1);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;gap:5px;}
+.add-btn{background:var(--t1);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;}
 .add-btn:hover{opacity:.82;}
 .timer-strip{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:7px 13px;}
 .timer-dot{width:7px;height:7px;border-radius:50%;background:var(--t4);flex-shrink:0;}
@@ -85,12 +83,11 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .log-time{font-family:var(--mono);font-size:11px;color:var(--t3);min-width:95px;}
 .log-proj{flex:1;}
 .log-dur{font-family:var(--mono);font-size:12px;color:var(--t1);min-width:38px;text-align:right;}
-.log-del{background:none;border:none;cursor:pointer;color:var(--t4);font-size:13px;padding:2px 4px;border-radius:4px;transition:color .1s;}
+.log-del{background:none;border:none;cursor:pointer;color:var(--t4);font-size:13px;padding:2px 4px;border-radius:4px;transition:color .1s;display:flex;align-items:center;}
 .log-del:hover{color:#c00;}
 .empty-msg{font-size:12px;color:var(--t3);text-align:center;padding:14px 0;}
 
-/* project grass block */
-/* right panel */
+/* project block */
 .proj-right-col{display:flex;flex-direction:column;gap:10px;min-width:160px;max-width:190px;flex-shrink:0;}
 .mini-chart-wrap{background:var(--bg3);border-radius:var(--r);padding:12px 14px;}
 .mini-chart-title{font-size:10px;color:var(--t3);margin-bottom:8px;letter-spacing:.04em;}
@@ -108,7 +105,6 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .proj-memo-label{font-size:9px;color:var(--t3);}
 .proj-memo-input{background:transparent;border:none;outline:none;font-size:11px;color:var(--t2);font-family:var(--font);resize:none;width:100%;flex:1;min-height:52px;line-height:1.5;}
 .proj-memo-input::placeholder{color:var(--t4);}
-/* project grass block */
 .proj-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;display:flex;flex-direction:column;gap:14px;}
 .proj-block-top{display:flex;gap:16px;align-items:flex-start;}
 .proj-stats-col{display:flex;flex-direction:column;gap:8px;min-width:108px;width:108px;flex-shrink:0;}
@@ -118,12 +114,11 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .proj-stat-value span{font-size:11px;color:var(--t2);margin-left:1px;}
 .proj-grass-col{flex:1;min-width:0;}
 .proj-grass-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px;}
-.proj-name-block{}
 .proj-grass-name{font-size:14px;font-weight:600;}
-.proj-grass-owner{font-size:11px;color:var(--t3);margin-top:2px;}
+.proj-grass-owner{font-size:11px;color:var(--t3);margin-top:2px;display:flex;align-items:center;gap:3px;}
 .proj-month-nav{display:flex;align-items:center;gap:5px;flex-shrink:0;}
 .proj-month-label{font-family:var(--mono);font-size:11px;color:var(--t3);min-width:72px;text-align:center;}
-.proj-nav-btn{background:none;border:1px solid var(--border);border-radius:5px;width:22px;height:22px;cursor:pointer;color:var(--t3);font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .1s;}
+.proj-nav-btn{background:none;border:1px solid var(--border);border-radius:5px;width:22px;height:22px;cursor:pointer;color:var(--t3);display:flex;align-items:center;justify-content:center;transition:all .1s;}
 .proj-nav-btn:hover{background:var(--bg3);color:var(--t1);}
 
 /* grass */
@@ -141,9 +136,20 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .grass-cell.empty-cell{visibility:hidden;}
 .grass-legend{display:flex;align-items:center;gap:5px;margin-top:8px;font-size:10px;color:var(--t3);}
 .legend-sq{width:11px;height:11px;border-radius:2px;}
-
 .projects-section{display:flex;flex-direction:column;gap:14px;}
 
+/* nickname */
+.nick-bar{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);}
+.nick-badge{font-family:var(--mono);font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;border:1px solid var(--border2);cursor:pointer;color:var(--t2);transition:background .1s;}
+.nick-badge:hover{background:var(--bg3);}
+
+/* firebase status */
+.fb-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);}
+.fb-dot{width:6px;height:6px;border-radius:50%;background:var(--t4);}
+.fb-dot.connected{background:#2e8b57;}
+.fb-dot.error{background:#c00;}
+
+/* tooltip */
 #gtooltip{position:fixed;background:var(--t1);color:#fff;border-radius:6px;padding:5px 9px;font-size:11px;pointer-events:none;z-index:999;display:none;white-space:nowrap;}
 
 /* modal */
@@ -162,25 +168,15 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .modal-btn.primary:hover{opacity:.85;}
 .modal-btn.danger{color:#c00;border-color:rgba(200,0,0,.2);}
 
-/* nickname */
-.nick-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t3);}
-.nick-badge{font-family:var(--mono);font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;border:1px solid var(--border2);cursor:pointer;color:var(--t2);transition:background .1s;}
-.nick-badge:hover{background:var(--bg3);}
-/* firebase status */
-.fb-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);}
-.fb-dot{width:6px;height:6px;border-radius:50%;background:var(--t4);}
-.fb-dot.connected{background:#2e8b57;}
-.fb-dot.error{background:#c00;}
-
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px;}
-
 /* data tools & footer */
 .data-toolbar{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:2px 0;}
 .data-btn{background:none;border:none;cursor:pointer;font-size:10px;color:var(--t4);font-family:var(--mono);display:inline-flex;align-items:center;gap:4px;padding:3px 6px;border-radius:4px;transition:color .15s;}
 .data-btn:hover{color:var(--t2);}
 .data-sep{color:var(--t4);font-size:10px;user-select:none;}
-.app-footer{text-align:center;font-size:10px;color:var(--t4);font-family:var(--mono);padding-top:8px;letter-spacing:.04em;}
+.app-footer{text-align:center;font-size:10px;color:var(--t4);font-family:var(--mono);padding-top:4px;letter-spacing:.04em;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px;}
 </style>
 </head>
 <body>
@@ -189,7 +185,10 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
   <div class="header">
     <h1>moolpool</h1>
     <div style="display:flex;align-items:center;gap:14px;">
-      <div class="nick-bar"><span style="color:var(--t4)">접속:</span><span class="nick-badge" id="nickBadge" onclick="showNickModal()" title="닉네임 변경">...</span></div>
+      <div class="nick-bar">
+        <span style="color:var(--t4)">나:</span>
+        <span class="nick-badge" id="nickBadge" onclick="showNickModal()" title="닉네임 변경">...</span>
+      </div>
       <div class="fb-status"><div class="fb-dot" id="fbDot"></div><span id="fbLabel">로컬 모드</span></div>
       <span class="date-badge" id="headerDate"></span>
     </div>
@@ -205,11 +204,11 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
     <div class="entry-area">
       <div class="time-row">
         <span class="time-label">시작</span>
-        <input type="text" class="time-input" id="startInput" placeholder="12:00" maxlength="5">
+        <input type="text" class="time-input" id="startInput" placeholder="09:00" maxlength="5">
         <span class="time-sep">—</span>
         <span class="time-label">종료</span>
-        <input type="text" class="time-input" id="endInput" placeholder="13:30" maxlength="5">
-        <button class="add-btn" id="addBtnEl" onclick="addSession()">추가</button>
+        <input type="text" class="time-input" id="endInput" placeholder="10:30" maxlength="5">
+        <button class="add-btn" onclick="addSession()">추가</button>
       </div>
       <div class="timer-strip">
         <div class="timer-dot" id="timerDot"></div>
@@ -221,7 +220,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
   </div>
 
   <div class="card">
-    <div class="card-title" id="tlTitle">오늘 타임라인</div>
+    <div class="card-title">오늘 타임라인</div>
     <div class="timeline-wrap"><div class="timeline-scroll" id="timelineScroll"></div></div>
   </div>
 
@@ -232,10 +231,16 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 
   <div class="projects-section" id="projectsSection"></div>
 
-  <!-- data tools -->
   <div class="data-toolbar">
-    <button class="data-btn" id="saveDataBtn" onclick="exportData()" title="데이터 내보내기 (JSON 파일 저장)"><span id="saveIcon"></span> 저장</button><span class="data-sep">|</span>
-    <button class="data-btn" onclick="importData()" title="데이터 불러오기 (JSON 파일 열기)"><span id="loadIcon"></span> 불러오기</button>
+    <button class="data-btn" onclick="exportData()" title="JSON 파일로 저장">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      저장
+    </button>
+    <span class="data-sep">|</span>
+    <button class="data-btn" onclick="importData()" title="JSON 파일 불러오기">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      불러오기
+    </button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
   </div>
   <div class="app-footer">v1.1.0</div>
@@ -246,44 +251,38 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 
 <script type="module">
 
-// ── SVG icons (inline, no font dependency) ──
+// ── SVG icons ──
 const ICO = {
-  plus:      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
-  chevL:     '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
-  chevR:     '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
-  users:     '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-  x:         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
-  download:  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
-  upload:    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+  plus:  '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  chevL: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+  chevR: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+  users: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  x:     '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
 };
 
 // ════════════════════════════════════════
-//  FIREBASE CONFIG — 여기에 값을 채워넣으세요
-//  Firebase Console > 프로젝트 설정 > 앱 > firebaseConfig
+//  FIREBASE CONFIG
 // ════════════════════════════════════════
 const FIREBASE_CONFIG = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey: "AIzaSyBDybpGF6rc3MmLU1riwR9_tz-Ves_w3OQ",
+  authDomain: "moolpool-growing.firebaseapp.com",
+  projectId: "moolpool-growing",
+  storageBucket: "moolpool-growing.firebasestorage.app",
+  messagingSenderId: "860084289772",
+  appId: "1:860084289772:web:3883481f91ced112cda5c9"
 };
-// FIREBASE_CONFIG.apiKey 가 "YOUR_API_KEY" 이면 로컬 모드로 동작합니다.
 // ════════════════════════════════════════
 
-// ── DB abstraction (local ↔ Firebase) ──
-let db = null; // Firestore instance if available
+let db = null;
 
 async function initFirebase() {
-  if (FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") return false;
   try {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-    const { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, getDocs }
+    const { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot }
       = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
     const app = initializeApp(FIREBASE_CONFIG);
     db = getFirestore(app);
-    window._fs = { collection, doc, setDoc, deleteDoc, onSnapshot, getDocs };
+    window._fs = { collection, doc, setDoc, deleteDoc, onSnapshot };
     return true;
   } catch(e) {
     console.error("Firebase init failed:", e);
@@ -291,7 +290,7 @@ async function initFirebase() {
   }
 }
 
-// ── Storage helpers ──
+// ── Storage ──
 const LOCAL_KEY = "sp_v5";
 function loadLocal() {
   try { const r = localStorage.getItem(LOCAL_KEY); return r ? JSON.parse(r) : { projects:[], sessions:[] }; }
@@ -301,7 +300,6 @@ function saveLocal(s) {
   try { localStorage.setItem(LOCAL_KEY, JSON.stringify(s)); } catch(e) {}
 }
 
-// Cloud save: each project & session is its own doc for real-time multi-user
 async function saveProject(p) {
   if (!db) return;
   const { doc, setDoc } = window._fs;
@@ -325,13 +323,13 @@ async function deleteSessionCloud(id) {
   await deleteDoc(doc(db, "sessions", id));
 }
 
-// ── App State ──
+// ── State ──
 let state = { projects:[], sessions:[] };
 let activeProjectId = null;
 const _memoTimers = {};
 let timerRunning = false, timerStart = null, timerInterval = null;
 
-// ── Nickname (local-only, used as createdBy) ──
+// ── Nickname ──
 const NICK_KEY = 'sp_nickname';
 let myNick = localStorage.getItem(NICK_KEY) || '';
 
@@ -343,28 +341,23 @@ function setNick(n) {
   if (badge) badge.textContent = myNick || '이름 없음';
 }
 window.showNickModal = function() {
-  document.getElementById('modalContainer').innerHTML = `
-    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
-        <h3>내 닉네임</h3>
-        <div class="modal-field">
-          <div class="modal-label">세션 기록에 표시될 이름</div>
-          <input class="modal-input" id="mNickInput" placeholder="예) 지수" maxlength="20" value="${myNick}">
-        </div>
-        <div class="modal-btns">
-          <button class="modal-btn" onclick="closeModal()">취소</button>
-          <button class="modal-btn primary" onclick="confirmNick()">저장</button>
-        </div>
-      </div>
-    </div>`;
-  document.getElementById('mNickInput').focus();
-  document.getElementById('mNickInput').addEventListener('keydown', e => { if(e.key==='Enter') confirmNick(); });
+  document.getElementById('modalContainer').innerHTML =
+    '<div class="modal-bg" onclick="if(event.target===this)closeModal()">'
+    +'<div class="modal"><h3>내 닉네임</h3>'
+    +'<div class="modal-field"><div class="modal-label">세션 기록에 표시될 이름</div>'
+    +'<input class="modal-input" id="mNickInput" placeholder="예) 지수" maxlength="20" value="'+myNick+'"></div>'
+    +'<div class="modal-btns">'
+    +'<button class="modal-btn" onclick="closeModal()">취소</button>'
+    +'<button class="modal-btn primary" onclick="confirmNick()">저장</button>'
+    +'</div></div></div>';
+  const inp = document.getElementById('mNickInput');
+  inp.focus();
+  inp.addEventListener('keydown', e => { if(e.key==='Enter') confirmNick(); });
 };
 window.confirmNick = function() {
   const val = document.getElementById('mNickInput').value.trim();
   if (!val) return;
-  setNick(val);
-  closeModal();
+  setNick(val); closeModal();
 };
 
 // ── Constants ──
@@ -393,70 +386,59 @@ function durStr(m){ if(m<60)return m+'분'; const h=Math.floor(m/60),mm=m%60; re
 function getPal(idx){ return PALETTES[idx % PALETTES.length]; }
 function getProjById(id){ return state.projects.find(p=>p.id===id); }
 
-// ── Time input: auto zero-pad ──
+// ── Time input ──
 function setupTimeInput(id) {
   const el = document.getElementById(id);
   el.addEventListener('input', function() {
     let raw = this.value.replace(/[^0-9:]/g,'');
-    // strip existing colon and reformat
     const digits = raw.replace(':','');
-    if (digits.length >= 3) {
-      this.value = digits.slice(0,2) + ':' + digits.slice(2,4);
-    } else {
-      this.value = raw;
-    }
+    if (digits.length >= 3) this.value = digits.slice(0,2)+':'+digits.slice(2,4);
+    else this.value = raw;
   });
-  el.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') addSession();
-  });
+  el.addEventListener('keydown', e => { if(e.key==='Enter') addSession(); });
   el.addEventListener('blur', function() {
-    const v = this.value.trim();
-    if (!v) return;
-    // auto zero-pad: "3" → "03:00", "930" → "09:30", "9:3" → "09:03"
+    const v = this.value.trim(); if(!v) return;
     let digits = v.replace(/\D/g,'');
-    if (digits.length === 0) return;
-    if (digits.length === 1) digits = '0' + digits + '00';       // 3 → 0300
-    else if (digits.length === 2) digits = digits + '00';         // 13 → 1300
-    else if (digits.length === 3) digits = '0' + digits;          // 930 → 0930
-    const h = parseInt(digits.slice(0,2)), mn = parseInt(digits.slice(2,4));
-    const total = h*60 + mn;
-    this.value = fmtTime(clamp(snap10(total)));
+    if(!digits.length) return;
+    if(digits.length===1) digits='0'+digits+'00';
+    else if(digits.length===2) digits=digits+'00';
+    else if(digits.length===3) digits='0'+digits;
+    const h=parseInt(digits.slice(0,2)), mn=parseInt(digits.slice(2,4));
+    this.value = fmtTime(clamp(snap10(h*60+mn)));
   });
 }
 
 // ── Projects ──
 function showAddProjectModal() {
-  const colorIdx = state.projects.length % PALETTES.length;
-  const pal = getPal(colorIdx);
-  document.getElementById('modalContainer').innerHTML = `
-    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
-        <h3>새 프로젝트</h3>
-        <div class="modal-field">
-          <div class="modal-label">프로젝트 이름</div>
-          <input class="modal-input" id="mProjName" placeholder="예) 알고리즘 스터디" maxlength="30" autofocus>
-        </div>
-        <div class="modal-field">
-          <div class="modal-label">소유자 / 참여자</div>
-          <input class="modal-input" id="mProjOwner" placeholder="예) 김지수, 박민준" maxlength="50">
-        </div>
-        <div class="modal-btns">
-          <button class="modal-btn" onclick="closeModal()">취소</button>
-          <button class="modal-btn primary" onclick="confirmAddProject()">추가</button>
-        </div>
-      </div>
-    </div>`;
-  document.getElementById('mProjName').focus();
-  document.getElementById('mProjName').addEventListener('keydown', e => { if(e.key==='Enter') confirmAddProject(); });
+  document.getElementById('modalContainer').innerHTML =
+    '<div class="modal-bg" onclick="if(event.target===this)closeModal()">'
+    +'<div class="modal"><h3>새 프로젝트</h3>'
+    +'<div class="modal-field"><div class="modal-label">프로젝트 이름</div>'
+    +'<input class="modal-input" id="mProjName" placeholder="예) 알고리즘 스터디" maxlength="30"></div>'
+    +'<div class="modal-field"><div class="modal-label">소유자 / 참여자</div>'
+    +'<input class="modal-input" id="mProjOwner" placeholder="예) 지수, 민준" maxlength="50"></div>'
+    +'<div class="modal-btns">'
+    +'<button class="modal-btn" onclick="closeModal()">취소</button>'
+    +'<button class="modal-btn primary" onclick="confirmAddProject()">추가</button>'
+    +'</div></div></div>';
+  const inp = document.getElementById('mProjName');
+  inp.focus();
+  inp.addEventListener('keydown', e => { if(e.key==='Enter') confirmAddProject(); });
 }
+window.showAddProjectModal = showAddProjectModal;
+
 window.confirmAddProject = function() {
   const name = document.getElementById('mProjName').value.trim();
   const owner = document.getElementById('mProjOwner').value.trim();
   if (!name) return;
   if (state.projects.some(p=>p.name===name)) { closeModal(); return; }
   const colorIdx = state.projects.length % PALETTES.length;
-  const p = { id:'p'+Date.now()+Math.random().toString(36).slice(2,7), name, owner, colorIdx, createdDate: todayStr(),
-    _vy: new Date().getFullYear(), _vm: new Date().getMonth() };
+  const now = new Date();
+  const p = {
+    id: 'p'+Date.now()+Math.random().toString(36).slice(2,7),
+    name, owner, colorIdx, createdDate: todayStr(),
+    _vy: now.getFullYear(), _vm: now.getMonth()
+  };
   state.projects.push(p);
   if (!activeProjectId) activeProjectId = p.id;
   saveLocal(state);
@@ -464,9 +446,9 @@ window.confirmAddProject = function() {
   closeModal();
   renderAll();
 };
+
 window.removeProject = function(id) {
-  const proj = getProjById(id);
-  if (!proj) return;
+  const proj = getProjById(id); if(!proj) return;
   showConfirm('"'+proj.name+'" 삭제', '이 프로젝트의 모든 세션도 함께 삭제됩니다.', () => {
     state.projects = state.projects.filter(p=>p.id!==id);
     state.sessions = state.sessions.filter(s=>s.projectId!==id);
@@ -476,18 +458,23 @@ window.removeProject = function(id) {
     renderAll();
   });
 };
+
 window.selectProject = function(id) { activeProjectId = id; renderTags(); };
 
 // ── Sessions ──
 window.addSession = function() {
   if (!activeProjectId) { alert('프로젝트를 먼저 선택하세요.'); return; }
-  const sv = document.getElementById('startInput').value;
-  const ev = document.getElementById('endInput').value;
-  const s = parseTime(sv), e = parseTime(ev);
-  if (s===null||e===null) { alert('시간 형식: HH:MM  예) 13:30'); return; }
+  const s = parseTime(document.getElementById('startInput').value);
+  const e = parseTime(document.getElementById('endInput').value);
+  if (s===null||e===null) { alert('시간 형식: HH:MM  예) 09:30'); return; }
   const ss = clamp(snap10(s)), ee = clamp(snap10(e));
   if (ee<=ss) { alert('종료 시간이 시작 시간보다 늦어야 해요.'); return; }
-  const sess = { id:'s'+Date.now()+Math.random().toString(36).slice(2,7), projectId:activeProjectId, date:todayStr(), start:ss, end:ee, mins:ee-ss, createdBy: getNick() };
+  const sess = {
+    id: 's'+Date.now()+Math.random().toString(36).slice(2,7),
+    projectId: activeProjectId, date: todayStr(),
+    start: ss, end: ee, mins: ee-ss,
+    createdBy: getNick()
+  };
   state.sessions.push(sess);
   saveLocal(state);
   saveSession(sess);
@@ -495,6 +482,7 @@ window.addSession = function() {
   document.getElementById('endInput').value='';
   renderAll();
 };
+
 window.deleteSession = function(id) {
   state.sessions = state.sessions.filter(s=>s.id!==id);
   saveLocal(state);
@@ -535,18 +523,19 @@ function renderTags() {
   state.projects.forEach(p => {
     const pal = getPal(p.colorIdx);
     const chip = document.createElement('div');
-    chip.className = 'tag-chip' + (activeProjectId===p.id?' active':'');
+    chip.className = 'tag-chip'+(activeProjectId===p.id?' active':'');
     chip.style.background = pal.chipBg;
     chip.style.color = pal.fg;
     chip.onclick = () => selectProject(p.id);
     chip.innerHTML = '<span class="dot" style="background:'+pal.fg+'"></span>'
-      + p.name
-      + '<button class="del-btn" onclick="event.stopPropagation();removeProject(\''+p.id+'\')" title="삭제">x</button>';
+      +p.name
+      +'<button class="del-btn" onclick="event.stopPropagation();removeProject(\''+p.id+'\')" title="삭제">x</button>';
     area.appendChild(chip);
   });
   const form = document.createElement('div');
   form.className = 'new-tag-form';
-  form.innerHTML = '<button class="icon-btn" onclick="showAddProjectModal()" title="새 프로젝트" style="width:auto;padding:0 10px;gap:5px;">' + ICO.plus + '<span style="font-size:11px">새 프로젝트</span></button>';
+  form.innerHTML = '<button class="icon-btn" onclick="showAddProjectModal()" title="새 프로젝트">'
+    +ICO.plus+'<span>새 프로젝트</span></button>';
   area.appendChild(form);
 }
 
@@ -557,22 +546,22 @@ function renderTimeline() {
   const scroll = document.getElementById('timelineScroll');
   const now = new Date();
   const nowM = now.getHours()*60+now.getMinutes();
-  const nowPct = (nowM-HOUR_START*60)/TOTAL_MINS*100;
+  const nowPct = nowM/TOTAL_MINS*100;
 
   let html = '<div class="tl-header"><div class="tl-label-col"></div><div class="tl-hours">';
-  for(let h=HOUR_START;h<=HOUR_END;h++) html+='<div class="tl-hour-mark">'+(h===24?'00':p2(h))+'</div>';
+  for(let h=0;h<=24;h++) html+='<div class="tl-hour-mark">'+p2(h===24?0:h)+'</div>';
   html+='</div></div><div class="tl-grid">';
-  if (!state.projects.length) html+='<div class="empty-msg" style="font-size:11px">프로젝트를 추가하면 타임라인이 표시돼요.</div>';
+  if(!state.projects.length) html+='<div class="empty-msg" style="font-size:11px">프로젝트를 추가하면 타임라인이 표시돼요.</div>';
   state.projects.forEach(p=>{
     const pal=getPal(p.colorIdx);
     const ps=ts.filter(s=>s.projectId===p.id);
     html+='<div class="tl-row"><div class="tl-proj-label" style="color:'+pal.fg+'">'+p.name+'</div>';
     html+='<div class="tl-track">';
-    for(let m=0;m<=TOTAL_MINS;m+=30) html+='<div class="tl-tick" style="left:'+(m/TOTAL_MINS*100).toFixed(2)+'%"></div>';
-    if(nowM>=HOUR_START*60&&nowM<=HOUR_END*60) html+='<div class="tl-now-line" style="left:'+nowPct.toFixed(2)+'%"></div>';
+    for(let m=0;m<=TOTAL_MINS;m+=60) html+='<div class="tl-tick" style="left:'+(m/TOTAL_MINS*100).toFixed(2)+'%"></div>';
+    html+='<div class="tl-now-line" style="left:'+nowPct.toFixed(2)+'%"></div>';
     ps.forEach(s=>{
-      const left=((s.start-HOUR_START*60)/TOTAL_MINS*100).toFixed(2);
-      const width=Math.max(0.5,s.mins/TOTAL_MINS*100).toFixed(2);
+      const left=(s.start/TOTAL_MINS*100).toFixed(2);
+      const width=Math.max(0.3,s.mins/TOTAL_MINS*100).toFixed(2);
       html+='<div class="tl-block" style="left:'+left+'%;width:'+width+'%;background:'+pal.fg+'">'
         +'<div class="tl-tip">'+fmtTime(s.start)+' - '+fmtTime(s.end)+' ('+durStr(s.mins)+')</div></div>';
     });
@@ -591,14 +580,14 @@ function renderLog() {
   list.innerHTML=ss.map(s=>{
     const proj=getProjById(s.projectId);
     const pal=proj?getPal(proj.colorIdx):{fg:'#aaa'};
-    const isMine = !s.createdBy || s.createdBy === getNick();
-    const byLabel = s.createdBy ? '<span style="font-size:10px;color:var(--t4);margin-left:4px">' + s.createdBy + '</span>' : '';
+    const isMine = !s.createdBy || s.createdBy===getNick();
+    const byLabel = s.createdBy ? '<span style="font-size:10px;color:var(--t4);margin-left:4px">'+s.createdBy+'</span>' : '';
     return '<div class="log-item">'
       +'<div class="log-bar" style="background:'+pal.fg+'"></div>'
       +'<div class="log-time">'+fmtTime(s.start)+' - '+fmtTime(s.end)+'</div>'
       +'<div class="log-proj" style="color:'+pal.fg+'">'+(proj?proj.name:'?')+byLabel+'</div>'
       +'<div class="log-dur">'+durStr(s.mins)+'</div>'
-      +(isMine ? '<button class="log-del" onclick="deleteSession(\''+s.id+'\')" title="삭제">'+ICO.x+'</button>' : '<div style="width:20px"></div>')
+      +(isMine?'<button class="log-del" onclick="deleteSession(\''+s.id+'\')" title="삭제">'+ICO.x+'</button>':'<div style="width:20px"></div>')
       +'</div>';
   }).join('');
 }
@@ -612,25 +601,19 @@ function getLevel(m){ if(m===0)return 0;if(m<30)return 1;if(m<60)return 2;if(m<1
 function buildGrassGrid(p, pal, vy, vm) {
   const today=todayStr();
   const daysInMonth=new Date(vy,vm+1,0).getDate();
-  const rawFirst=new Date(vy,vm,1).getDay();
-  const firstMon=(rawFirst+6)%7;
-  const total=firstMon+daysInMonth;
-  const weeks=Math.ceil(total/7);
-
+  const firstMon=(new Date(vy,vm,1).getDay()+6)%7;
+  const weeks=Math.ceil((firstMon+daysInMonth)/7);
   const hgrid=Array.from({length:weeks},()=>Array(7).fill(null));
   for(let d=1;d<=daysInMonth;d++){
     const idx=firstMon+d-1;
     hgrid[Math.floor(idx/7)][idx%7]=d;
   }
-
   let html='<div class="grass-scroll"><div class="grass-table-h">';
   html+='<div class="grass-hrow"><div class="grass-week-spacer"></div>';
   DOW.forEach(d=>{ html+='<div class="grass-dow-h">'+d+'</div>'; });
   html+='</div>';
-
   for(let wr=0;wr<weeks;wr++){
-    let wlabel='';
-    for(let dc=0;dc<7;dc++){if(hgrid[wr][dc]!==null){wlabel=hgrid[wr][dc];break;}}
+    let wlabel=''; for(let dc=0;dc<7;dc++){if(hgrid[wr][dc]!==null){wlabel=hgrid[wr][dc];break;}}
     html+='<div class="grass-hrow"><div class="grass-week-label">'+wlabel+'</div>';
     for(let dc=0;dc<7;dc++){
       const day=hgrid[wr][dc];
@@ -656,42 +639,35 @@ function buildGrassGrid(p, pal, vy, vm) {
 }
 
 function getProjStats(p) {
-  const today = todayStr();
-  const allSess = state.sessions.filter(s=>s.projectId===p.id);
-  const todayMins = allSess.filter(s=>s.date===today).reduce((a,s)=>a+s.mins,0);
-  const totalMins = allSess.reduce((a,s)=>a+s.mins,0);
-  // streak: count consecutive days back from today that have sessions
+  const today=todayStr();
+  const allSess=state.sessions.filter(s=>s.projectId===p.id);
+  const todayMins=allSess.filter(s=>s.date===today).reduce((a,s)=>a+s.mins,0);
+  const totalMins=allSess.reduce((a,s)=>a+s.mins,0);
   let streak=0;
-  const cur=new Date();
   for(let i=0;i<365;i++){
-    const dd=new Date(cur); dd.setDate(dd.getDate()-i);
+    const dd=new Date(); dd.setDate(dd.getDate()-i);
     const dk=dd.getFullYear()+'-'+p2(dd.getMonth()+1)+'-'+p2(dd.getDate());
-    if(getMinsForDate(p.id,dk)>0) streak++;
-    else break;
+    if(getMinsForDate(p.id,dk)>0) streak++; else break;
   }
-  // this month session count
   const d=new Date(); const prefix=d.getFullYear()+'-'+p2(d.getMonth()+1);
   const monthSess=allSess.filter(s=>s.date.startsWith(prefix)).length;
-  // last 7 days
   const week=[];
   for(let i=6;i>=0;i--){
     const dd=new Date(); dd.setDate(dd.getDate()-i);
     const dk=dd.getFullYear()+'-'+p2(dd.getMonth()+1)+'-'+p2(dd.getDate());
-    const dow=['S','M','T','W','T','F','S'][dd.getDay()];
-    week.push({dk,dow,mins:getMinsForDate(p.id,dk),isToday:i===0});
+    week.push({dk,dow:['S','M','T','W','T','F','S'][dd.getDay()],mins:getMinsForDate(p.id,dk),isToday:i===0});
   }
   return {todayMins,totalMins,streak,monthSess,week};
 }
 
 function buildMiniChart(week, pal) {
-  const maxM = Math.max(...week.map(d=>d.mins), 30);
-  let html='<div class="mini-chart-wrap"><div class="mini-chart-title">최근 7일</div>';
-  html+='<div class="mini-bars">';
+  const maxM=Math.max(...week.map(d=>d.mins),30);
+  let html='<div class="mini-chart-wrap"><div class="mini-chart-title">최근 7일</div><div class="mini-bars">';
   week.forEach(d=>{
-    const pct = d.mins===0 ? 0 : Math.max(5, Math.round(d.mins/maxM*100));
+    const pct=d.mins===0?0:Math.max(5,Math.round(d.mins/maxM*100));
     html+='<div class="mini-bar-col">'
       +'<div class="mini-bar-track">'
-      +'<div class="mini-bar-fill" style="height:'+pct+'%;background:'+(d.isToday?pal.fg:pal.levels[1])+';opacity:'+(d.isToday?1:.75)+';" title="'+d.mins+'분"></div>'
+      +'<div class="mini-bar-fill" style="height:'+pct+'%;background:'+(d.isToday?pal.fg:pal.levels[1])+';opacity:'+(d.isToday?1:.75)+'" title="'+d.mins+'분"></div>'
       +'</div>'
       +'<div class="mini-bar-label" style="color:'+(d.isToday?pal.fg:'var(--t3)')+'">'+d.dow+'</div>'
       +'</div>';
@@ -707,27 +683,23 @@ function buildProjBlock(p) {
   const stats=getProjStats(p);
   const memo=p.memo||'';
 
-  const todayFmt = stats.todayMins<60
-    ? stats.todayMins+'<span>분</span>'
-    : Math.floor(stats.todayMins/60)+'<span>h</span>'+p2(stats.todayMins%60)+'<span>m</span>';
-  const totalFmt = stats.totalMins===0 ? '0<span>분</span>'
-    : stats.totalMins<60 ? stats.totalMins+'<span>분</span>'
-    : (stats.totalMins/60).toFixed(1)+'<span>h</span>';
+  const todayFmt=stats.todayMins<60
+    ?stats.todayMins+'<span>분</span>'
+    :Math.floor(stats.todayMins/60)+'<span>h</span>'+p2(stats.todayMins%60)+'<span>m</span>';
+  const totalFmt=stats.totalMins===0?'0<span>분</span>'
+    :stats.totalMins<60?stats.totalMins+'<span>분</span>'
+    :(stats.totalMins/60).toFixed(1)+'<span>h</span>';
 
   let html='<div class="proj-block-top">';
-
-  // left: today + total
   html+='<div class="proj-stats-col">'
     +'<div class="proj-stat-box"><div class="proj-stat-label">오늘</div><div class="proj-stat-value">'+todayFmt+'</div></div>'
     +'<div class="proj-stat-box"><div class="proj-stat-label">누적</div><div class="proj-stat-value">'+totalFmt+'</div></div>'
     +'</div>';
-
-  // middle: grass
   html+='<div class="proj-grass-col">'
     +'<div class="proj-grass-head">'
-    +'<div class="proj-name-block">'
+    +'<div>'
     +'<div class="proj-grass-name" style="color:'+pal.fg+'">'+p.name+'</div>'
-    +(p.owner?'<div class="proj-grass-owner"><span style="vertical-align:-1px;margin-right:3px;opacity:.55;display:inline-flex">'+ICO.users+'</span>'+p.owner+'</div>':'')
+    +(p.owner?'<div class="proj-grass-owner">'+ICO.users+'<span>'+p.owner+'</span></div>':'')
     +'</div>'
     +'<div class="proj-month-nav">'
     +'<button class="proj-nav-btn" onclick="grassNav(\''+p.id+'\',-1)">'+ICO.chevL+'</button>'
@@ -735,16 +707,14 @@ function buildProjBlock(p) {
     +'<button class="proj-nav-btn" onclick="grassNav(\''+p.id+'\',1)">'+ICO.chevR+'</button>'
     +'</div>'
     +'</div>'
-    +buildGrassGrid(p, pal, vy, vm)
+    +buildGrassGrid(p,pal,vy,vm)
     +'<div class="grass-legend">적음 '
     +'<div class="legend-sq" style="background:var(--bg3);border:1px solid rgba(0,0,0,0.07)"></div>'
     +pal.levels.map(lv=>'<div class="legend-sq" style="background:'+lv+'"></div>').join('')
     +' 많음</div>'
     +'</div>';
-
-  // right: chart + kpi + memo
   html+='<div class="proj-right-col">'
-    +buildMiniChart(stats.week, pal)
+    +buildMiniChart(stats.week,pal)
     +'<div class="proj-kpi-grid">'
     +'<div class="proj-kpi-box"><div class="proj-kpi-label">연속</div><div class="proj-kpi-value">'+stats.streak+'<span>일</span></div></div>'
     +'<div class="proj-kpi-box"><div class="proj-kpi-label">이번달</div><div class="proj-kpi-value">'+stats.monthSess+'<span>회</span></div></div>'
@@ -753,17 +723,15 @@ function buildProjBlock(p) {
     +'<textarea class="proj-memo-input" placeholder="목표나 메모를 적어요..." oninput="saveMemo(\''+p.id+'\',this.value)">'+memo+'</textarea>'
     +'</div>'
     +'</div>';
-
   html+='</div>';
   return html;
 }
 
 window.saveMemo = function(pid, val) {
-  const p = getProjById(pid); if(!p) return;
-  p.memo = val; saveLocal(state);
-  // debounce cloud save: only write after 600ms of no input
+  const p=getProjById(pid); if(!p) return;
+  p.memo=val; saveLocal(state);
   clearTimeout(_memoTimers[pid]);
-  _memoTimers[pid] = setTimeout(() => { if(db) saveProject(p); }, 600);
+  _memoTimers[pid]=setTimeout(()=>{ if(db) saveProject(p); }, 600);
 };
 
 function renderGrass() {
@@ -779,13 +747,13 @@ function renderGrass() {
 }
 
 window.grassNav = function(pid, dir) {
-  const p=getProjById(pid); if(!p)return;
+  const p=getProjById(pid); if(!p) return;
   if(p._vm===undefined){const d=new Date();p._vy=d.getFullYear();p._vm=d.getMonth();}
   p._vm+=dir;
   if(p._vm>11){p._vm=0;p._vy++;}
   if(p._vm<0){p._vm=11;p._vy--;}
   const card=document.getElementById('gc-'+pid);
-  if(card)card.innerHTML=buildProjBlock(p);
+  if(card) card.innerHTML=buildProjBlock(p);
 };
 
 // ── Tooltip ──
@@ -793,12 +761,11 @@ window.showGTip = function(e,dk,mins) {
   const tt=document.getElementById('gtooltip');
   const pts=dk.split('-');
   tt.textContent=parseInt(pts[1])+'월 '+parseInt(pts[2])+'일  '+(mins===0?'기록 없음':durStr(mins));
-  tt.style.display='block';tt.style.left=(e.clientX+12)+'px';tt.style.top=(e.clientY-28)+'px';
+  tt.style.display='block'; tt.style.left=(e.clientX+12)+'px'; tt.style.top=(e.clientY-28)+'px';
 };
-window.hideGTip=function(){document.getElementById('gtooltip').style.display='none';};
+window.hideGTip=function(){ document.getElementById('gtooltip').style.display='none'; };
 
-// ── Modal helpers ──
-window.showAddProjectModal = showAddProjectModal;
+// ── Modal ──
 function showConfirm(title,msg,onOk){
   document.getElementById('modalContainer').innerHTML=
     '<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">'
@@ -809,8 +776,8 @@ function showConfirm(title,msg,onOk){
     +'</div></div></div>';
   window._cb=onOk;
 }
-window.closeModal=function(){document.getElementById('modalContainer').innerHTML='';};
-window.confirmOk=function(){closeModal();if(window._cb)window._cb();};
+window.closeModal=function(){ document.getElementById('modalContainer').innerHTML=''; };
+window.confirmOk=function(){ closeModal(); if(window._cb) window._cb(); };
 
 // ── Header ──
 function renderHeader(){
@@ -820,7 +787,7 @@ function renderHeader(){
     d.getFullYear()+'. '+p2(d.getMonth()+1)+'. '+p2(d.getDate())+'. '+days[d.getDay()]+'요일';
 }
 
-// ── Firebase real-time sync ──
+// ── Firebase sync ──
 async function setupFirebaseSync() {
   const ok = await initFirebase();
   const dot=document.getElementById('fbDot'), label=document.getElementById('fbLabel');
@@ -828,64 +795,47 @@ async function setupFirebaseSync() {
   dot.className='fb-dot connected'; label.textContent='클라우드 연결됨';
 
   const { collection, onSnapshot } = window._fs;
-  // Projects
   onSnapshot(collection(db,"projects"), snap=>{
-    const cloudProjs = snap.docs.map(d=>d.data());
-    const now = new Date();
-    // merge cloud data with local UI state (_vy/_vm stay local-only)
-    const merged = cloudProjs.map(cp => {
-      const local = state.projects.find(p=>p.id===cp.id);
-      return {
-        ...cp,
-        _vy: local?._vy ?? now.getFullYear(),
-        _vm: local?._vm ?? now.getMonth(),
-        memo: cp.memo ?? local?.memo ?? '',
-      };
+    const now=new Date();
+    const cloudProjs=snap.docs.map(d=>d.data());
+    const merged=cloudProjs.map(cp=>{
+      const local=state.projects.find(p=>p.id===cp.id);
+      return { ...cp, _vy:local?._vy??now.getFullYear(), _vm:local?._vm??now.getMonth(), memo:cp.memo??local?.memo??'' };
     });
-    state.projects = merged;
-    if(!activeProjectId && merged.length) activeProjectId = merged[0].id;
+    state.projects=merged;
+    if(!activeProjectId&&merged.length) activeProjectId=merged[0].id;
     saveLocal(state); renderAll();
   });
-  // Sessions
   onSnapshot(collection(db,"sessions"), snap=>{
     state.sessions=snap.docs.map(d=>d.data());
     saveLocal(state); renderAll();
   });
 }
 
-
 // ── Data export / import ──
 window.exportData = function() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const d = new Date();
-  a.href = url;
-  a.download = 'study-planner-' + d.getFullYear() + p2(d.getMonth()+1) + p2(d.getDate()) + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const d=new Date();
+  a.href=url; a.download='moolpool-'+d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+'.json';
+  a.click(); URL.revokeObjectURL(url);
 };
-window.importData = function() {
-  document.getElementById('importFile').click();
-};
-window.handleImport = function(e) {
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
+window.importData=function(){ document.getElementById('importFile').click(); };
+window.handleImport=function(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
     try {
-      const imported = JSON.parse(ev.target.result);
-      if (!imported.projects || !imported.sessions) throw new Error('invalid');
-      // restore view state
-      const d = new Date();
-      imported.projects.forEach(p => { if(p._vy===undefined){p._vy=d.getFullYear();p._vm=d.getMonth();} });
-      state = imported;
-      saveLocal(state);
-      activeProjectId = state.projects[0]?.id || null;
+      const imported=JSON.parse(ev.target.result);
+      if(!imported.projects||!imported.sessions) throw new Error('invalid');
+      const d=new Date();
+      imported.projects.forEach(p=>{ if(p._vy===undefined){p._vy=d.getFullYear();p._vm=d.getMonth();} });
+      state=imported; saveLocal(state);
+      activeProjectId=state.projects[0]?.id||null;
       renderAll();
-    } catch(err) {
-      alert('파일 형식이 올바르지 않아요.');
-    }
-    e.target.value = '';
+    } catch(err){ alert('파일 형식이 올바르지 않아요.'); }
+    e.target.value='';
   };
   reader.readAsText(file);
 };
@@ -897,21 +847,15 @@ function renderAll(){
 // ── Init ──
 (function init(){
   state=loadLocal();
-  if(!state.projects)state.projects=[];
-  if(!state.sessions)state.sessions=[];
+  if(!state.projects) state.projects=[];
+  if(!state.sessions) state.sessions=[];
   const d=new Date();
   state.projects.forEach(p=>{ if(p._vy===undefined){p._vy=d.getFullYear();p._vm=d.getMonth();} });
   if(state.projects.length) activeProjectId=state.projects[0].id;
-  // init nickname badge
-  setNick(myNick || '');
-  if (!myNick) setTimeout(showNickModal, 400);
+  setNick(myNick||'');
+  if(!myNick) setTimeout(showNickModal, 500);
   setupTimeInput('startInput');
   setupTimeInput('endInput');
-  // inject SVG icons into static elements
-  const si = document.getElementById('saveIcon');
-  const li = document.getElementById('loadIcon');
-  if(si) si.innerHTML = ICO.download;
-  if(li) li.innerHTML = ICO.upload;
   renderAll();
   setInterval(()=>{ renderTimeline(); renderHeader(); }, 60000);
   setupFirebaseSync();
