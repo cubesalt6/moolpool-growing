@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>study.planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f7f6f3;--bg2:#fff;--bg3:#f0efe9;--bg4:#e8e7e0;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --t1:#1a1a1a;--t2:#555;--t3:#999;--t4:#ccc;
+  --r:8px;--rl:12px;
+  --font:'Noto Sans KR',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px;min-height:100vh;}
+.app{max-width:920px;margin:0 auto;padding:32px 20px 80px;display:flex;flex-direction:column;gap:20px;}
+
+.header{display:flex;align-items:baseline;justify-content:space-between;}
+.header h1{font-family:var(--mono);font-size:17px;font-weight:400;letter-spacing:-.01em;}
+.date-badge{font-family:var(--mono);font-size:11px;color:var(--t3);}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;}
+.card-title{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--t3);margin-bottom:14px;}
+
+/* tags */
+.tags-area{display:flex;flex-wrap:wrap;gap:7px;align-items:center;}
+.tag-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px 5px 8px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid transparent;transition:opacity .15s;user-select:none;}
+.tag-chip:hover{opacity:.8;}
+.tag-chip.active{border-color:rgba(0,0,0,0.22);}
+.tag-chip .dot{width:6px;height:6px;border-radius:50%;opacity:.75;flex-shrink:0;}
+.tag-chip .del-btn{background:none;border:none;cursor:pointer;font-size:13px;padding:0 0 0 3px;opacity:.4;color:inherit;display:none;}
+.tag-chip:hover .del-btn{display:inline;}
+.tag-chip .del-btn:hover{opacity:1;}
+.new-tag-form{display:flex;align-items:center;gap:6px;}
+.new-tag-input{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--t1);font-family:var(--font);width:130px;outline:none;}
+.new-tag-input:focus{border-color:rgba(0,0,0,0.28);}
+.new-tag-input::placeholder{color:var(--t3);}
+.icon-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);font-size:14px;transition:background .1s;}
+.icon-btn:hover{background:var(--bg4);color:var(--t1);}
+
+/* entry */
+.entry-area{display:flex;flex-direction:column;gap:11px;}
+.time-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.time-label{font-size:11px;color:var(--t3);min-width:24px;}
+.time-input{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;font-family:var(--mono);font-size:14px;color:var(--t1);width:86px;outline:none;text-align:center;}
+.time-input:focus{border-color:rgba(0,0,0,0.3);}
+.time-sep{color:var(--t3);font-family:var(--mono);}
+.add-btn{background:var(--t1);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;gap:5px;}
+.add-btn:hover{opacity:.82;}
+.timer-strip{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:7px 13px;}
+.timer-dot{width:7px;height:7px;border-radius:50%;background:var(--t4);flex-shrink:0;}
+.timer-dot.running{background:#2e8b57;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.timer-elapsed{font-family:var(--mono);font-size:12px;color:var(--t2);min-width:52px;}
+.timer-info{font-size:11px;color:var(--t3);flex:1;}
+.timer-btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;font-family:var(--font);transition:all .12s;}
+.timer-btn:hover{background:var(--bg4);color:var(--t1);}
+.timer-btn.stop{border-color:rgba(46,139,87,.4);color:#2e8b57;}
+
+/* timeline */
+.timeline-wrap{overflow-x:auto;}
+.timeline-scroll{min-width:560px;}
+.tl-header{display:flex;align-items:center;margin-bottom:6px;}
+.tl-label-col{width:46px;flex-shrink:0;}
+.tl-hours{flex:1;display:flex;}
+.tl-hour-mark{flex:1;font-family:var(--mono);font-size:9px;color:var(--t3);text-align:left;padding-left:2px;border-left:1px solid var(--border);}
+.tl-grid{display:flex;flex-direction:column;gap:4px;}
+.tl-row{display:flex;align-items:center;height:24px;}
+.tl-proj-label{width:46px;flex-shrink:0;font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:5px;}
+.tl-track{flex:1;height:16px;background:var(--bg3);border-radius:3px;position:relative;overflow:visible;}
+.tl-tick{position:absolute;top:0;width:1px;height:100%;background:rgba(0,0,0,0.06);pointer-events:none;}
+.tl-now-line{position:absolute;top:-3px;bottom:-3px;width:1.5px;background:rgba(0,0,0,0.18);pointer-events:none;}
+.tl-block{position:absolute;top:0;height:100%;border-radius:3px;opacity:.85;cursor:pointer;transition:opacity .1s;}
+.tl-block:hover{opacity:1;z-index:5;}
+.tl-tip{display:none;position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:var(--t1);color:#fff;border-radius:5px;padding:4px 8px;font-size:10px;white-space:nowrap;z-index:20;pointer-events:none;}
+.tl-block:hover .tl-tip{display:block;}
+
+/* log */
+.log-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.log-item:last-child{border-bottom:none;}
+.log-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0;}
+.log-time{font-family:var(--mono);font-size:11px;color:var(--t3);min-width:95px;}
+.log-proj{flex:1;}
+.log-dur{font-family:var(--mono);font-size:12px;color:var(--t1);min-width:38px;text-align:right;}
+.log-del{background:none;border:none;cursor:pointer;color:var(--t4);font-size:13px;padding:2px 4px;border-radius:4px;transition:color .1s;}
+.log-del:hover{color:#c00;}
+.empty-msg{font-size:12px;color:var(--t3);text-align:center;padding:14px 0;}
+
+/* project grass block */
+/* right panel */
+.proj-right-col{display:flex;flex-direction:column;gap:10px;min-width:160px;max-width:190px;flex-shrink:0;}
+.mini-chart-wrap{background:var(--bg3);border-radius:var(--r);padding:12px 14px;}
+.mini-chart-title{font-size:10px;color:var(--t3);margin-bottom:8px;letter-spacing:.04em;}
+.mini-bars{display:flex;align-items:flex-end;gap:3px;height:48px;}
+.mini-bar-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;}
+.mini-bar-track{width:100%;flex:1;display:flex;align-items:flex-end;border-radius:2px 2px 0 0;overflow:hidden;}
+.mini-bar-fill{width:100%;border-radius:2px 2px 0 0;transition:height .3s;min-height:0;}
+.mini-bar-label{font-size:7px;color:var(--t3);font-family:var(--mono);}
+.proj-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.proj-kpi-box{background:var(--bg3);border-radius:var(--r);padding:8px 10px;}
+.proj-kpi-label{font-size:9px;color:var(--t3);margin-bottom:2px;}
+.proj-kpi-value{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--t1);}
+.proj-kpi-value span{font-size:9px;color:var(--t2);}
+.proj-memo-box{background:var(--bg3);border-radius:var(--r);padding:10px 12px;flex:1;display:flex;flex-direction:column;gap:5px;}
+.proj-memo-label{font-size:9px;color:var(--t3);}
+.proj-memo-input{background:transparent;border:none;outline:none;font-size:11px;color:var(--t2);font-family:var(--font);resize:none;width:100%;flex:1;min-height:52px;line-height:1.5;}
+.proj-memo-input::placeholder{color:var(--t4);}
+/* project grass block */
+.proj-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;display:flex;flex-direction:column;gap:14px;}
+.proj-block-top{display:flex;gap:16px;align-items:flex-start;}
+.proj-stats-col{display:flex;flex-direction:column;gap:8px;min-width:108px;width:108px;flex-shrink:0;}
+.proj-stat-box{background:var(--bg3);border-radius:var(--r);padding:10px 14px;}
+.proj-stat-label{font-size:10px;color:var(--t3);margin-bottom:3px;}
+.proj-stat-value{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--t1);}
+.proj-stat-value span{font-size:11px;color:var(--t2);margin-left:1px;}
+.proj-grass-col{flex:1;min-width:0;}
+.proj-grass-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px;}
+.proj-name-block{}
+.proj-grass-name{font-size:14px;font-weight:600;}
+.proj-grass-owner{font-size:11px;color:var(--t3);margin-top:2px;}
+.proj-month-nav{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.proj-month-label{font-family:var(--mono);font-size:11px;color:var(--t3);min-width:72px;text-align:center;}
+.proj-nav-btn{background:none;border:1px solid var(--border);border-radius:5px;width:22px;height:22px;cursor:pointer;color:var(--t3);font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .1s;}
+.proj-nav-btn:hover{background:var(--bg3);color:var(--t1);}
+
+/* grass */
+.grass-scroll{overflow-x:auto;}
+.grass-table-h{display:inline-flex;flex-direction:column;gap:3px;}
+.grass-hrow{display:flex;align-items:center;gap:3px;}
+.grass-week-spacer{width:20px;flex-shrink:0;}
+.grass-week-label{width:20px;font-size:8px;color:var(--t3);text-align:right;flex-shrink:0;padding-right:3px;font-family:var(--mono);}
+.grass-dow-h{width:14px;font-size:9px;color:var(--t3);text-align:center;flex-shrink:0;font-family:var(--mono);}
+.grass-cell{width:14px;height:14px;border-radius:3px;cursor:pointer;flex-shrink:0;transition:transform .1s;}
+.grass-cell:hover{transform:scale(1.4);z-index:10;}
+.grass-cell.before-proj{background:var(--bg3) !important;border-color:transparent !important;opacity:.35;cursor:default;}
+.grass-cell.before-proj:hover{transform:none;}
+.grass-cell.today-cell{box-shadow:0 0 0 1.5px rgba(0,0,0,0.35);}
+.grass-cell.empty-cell{visibility:hidden;}
+.grass-legend{display:flex;align-items:center;gap:5px;margin-top:8px;font-size:10px;color:var(--t3);}
+.legend-sq{width:11px;height:11px;border-radius:2px;}
+
+.projects-section{display:flex;flex-direction:column;gap:14px;}
+
+#gtooltip{position:fixed;background:var(--t1);color:#fff;border-radius:6px;padding:5px 9px;font-size:11px;pointer-events:none;z-index:999;display:none;white-space:nowrap;}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:200;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:22px 24px;min-width:280px;max-width:360px;width:90%;}
+.modal h3{font-size:14px;font-weight:600;margin-bottom:12px;}
+.modal-field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.modal-label{font-size:11px;color:var(--t3);}
+.modal-input{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;font-size:13px;color:var(--t1);font-family:var(--font);outline:none;width:100%;}
+.modal-input:focus{border-color:rgba(0,0,0,0.3);}
+.modal p{font-size:12px;color:var(--t2);margin-bottom:16px;line-height:1.6;}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;}
+.modal-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--t1);cursor:pointer;font-family:var(--font);transition:background .1s;}
+.modal-btn:hover{background:var(--bg4);}
+.modal-btn.primary{background:var(--t1);color:#fff;border-color:var(--t1);}
+.modal-btn.primary:hover{opacity:.85;}
+.modal-btn.danger{color:#c00;border-color:rgba(200,0,0,.2);}
+
+/* firebase status */
+.fb-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);}
+.fb-dot{width:6px;height:6px;border-radius:50%;background:var(--t4);}
+.fb-dot.connected{background:#2e8b57;}
+.fb-dot.error{background:#c00;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px;}
+
+/* data tools & footer */
+.data-toolbar{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:2px 0;}
+.data-btn{background:none;border:none;cursor:pointer;font-size:10px;color:var(--t4);font-family:var(--mono);display:inline-flex;align-items:center;gap:4px;padding:3px 6px;border-radius:4px;transition:color .15s;}
+.data-btn:hover{color:var(--t2);}
+.data-sep{color:var(--t4);font-size:10px;user-select:none;}
+.app-footer{text-align:center;font-size:10px;color:var(--t4);font-family:var(--mono);padding-top:8px;letter-spacing:.04em;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <h1>study.planner</h1>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="fb-status"><div class="fb-dot" id="fbDot"></div><span id="fbLabel">로컬 모드</span></div>
+      <span class="date-badge" id="headerDate"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">프로젝트</div>
+    <div class="tags-area" id="tagsArea"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">세션 기록</div>
+    <div class="entry-area">
+      <div class="time-row">
+        <span class="time-label">시작</span>
+        <input type="text" class="time-input" id="startInput" placeholder="12:00" maxlength="5">
+        <span class="time-sep">—</span>
+        <span class="time-label">종료</span>
+        <input type="text" class="time-input" id="endInput" placeholder="13:30" maxlength="5">
+        <button class="add-btn" id="addBtnEl" onclick="addSession()">추가</button>
+      </div>
+      <div class="timer-strip">
+        <div class="timer-dot" id="timerDot"></div>
+        <span class="timer-elapsed" id="timerElapsed">00:00</span>
+        <span class="timer-info" id="timerInfo">타이머 켜고 끄면 시간 자동 입력</span>
+        <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">시작</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" id="tlTitle">오늘 타임라인</div>
+    <div class="timeline-wrap"><div class="timeline-scroll" id="timelineScroll"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">오늘 기록</div>
+    <div id="logList"><div class="empty-msg">아직 기록이 없어요.</div></div>
+  </div>
+
+  <div class="projects-section" id="projectsSection"></div>
+
+  <!-- data tools -->
+  <div class="data-toolbar">
+    <button class="data-btn" id="saveDataBtn" onclick="exportData()" title="데이터 내보내기 (JSON 파일 저장)"><span id="saveIcon"></span> 저장</button><span class="data-sep">|</span>
+    <button class="data-btn" onclick="importData()" title="데이터 불러오기 (JSON 파일 열기)"><span id="loadIcon"></span> 불러오기</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+  </div>
+  <div class="app-footer">study.planner v1.0.0 &nbsp;·&nbsp; localStorage + Firebase ready</div>
+
+</div>
+<div id="gtooltip"></div>
+<div id="modalContainer"></div>
+
+<script type="module">
+
+// ── SVG icons (inline, no font dependency) ──
+const ICO = {
+  plus:      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  chevL:     '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+  chevR:     '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+  users:     '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  x:         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  download:  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  upload:    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+};
+
+// ════════════════════════════════════════
+//  FIREBASE CONFIG — 여기에 값을 채워넣으세요
+//  Firebase Console > 프로젝트 설정 > 앱 > firebaseConfig
+// ════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+// FIREBASE_CONFIG.apiKey 가 "YOUR_API_KEY" 이면 로컬 모드로 동작합니다.
+// ════════════════════════════════════════
+
+// ── DB abstraction (local ↔ Firebase) ──
+let db = null; // Firestore instance if available
+
+async function initFirebase() {
+  if (FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") return false;
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, getDocs }
+      = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    const app = initializeApp(FIREBASE_CONFIG);
+    db = getFirestore(app);
+    window._fs = { collection, doc, setDoc, deleteDoc, onSnapshot, getDocs };
+    return true;
+  } catch(e) {
+    console.error("Firebase init failed:", e);
+    return false;
+  }
+}
+
+// ── Storage helpers ──
+const LOCAL_KEY = "sp_v5";
+function loadLocal() {
+  try { const r = localStorage.getItem(LOCAL_KEY); return r ? JSON.parse(r) : { projects:[], sessions:[] }; }
+  catch(e) { return { projects:[], sessions:[] }; }
+}
+function saveLocal(s) {
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(s)); } catch(e) {}
+}
+
+// Cloud save: each project & session is its own doc for real-time multi-user
+async function saveProject(p) {
+  if (!db) return;
+  const { doc, setDoc } = window._fs;
+  await setDoc(doc(db, "projects", p.id), p);
+}
+async function deleteProjectCloud(id) {
+  if (!db) return;
+  const { doc, deleteDoc } = window._fs;
+  await deleteDoc(doc(db, "projects", id));
+}
+async function saveSession(s) {
+  if (!db) return;
+  const { doc, setDoc } = window._fs;
+  await setDoc(doc(db, "sessions", s.id), s);
+}
+async function deleteSessionCloud(id) {
+  if (!db) return;
+  const { doc, deleteDoc } = window._fs;
+  await deleteDoc(doc(db, "sessions", id));
+}
+
+// ── App State ──
+let state = { projects:[], sessions:[] };
+let activeProjectId = null;
+let timerRunning = false, timerStart = null, timerInterval = null;
+
+// ── Constants ──
+const HOUR_START = 0, HOUR_END = 24, TOTAL_MINS = 24 * 60;
+const DOW = ['M','T','W','T','F','S','S'];
+const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const PALETTES = [
+  {fg:'#2e7d32',chipBg:'#e8f5e9',levels:['#c8e6c9','#a5d6a7','#66bb6a','#388e3c','#1b5e20'],border:'#c3e6c4'},
+  {fg:'#1565c0',chipBg:'#e3f2fd',levels:['#bbdefb','#90caf9','#42a5f5','#1976d2','#0d47a1'],border:'#b3d9f7'},
+  {fg:'#e65100',chipBg:'#fff3e0',levels:['#ffe0b2','#ffcc80','#ffa726','#f57c00','#e65100'],border:'#ffd9a0'},
+  {fg:'#6a1b9a',chipBg:'#f3e5f5',levels:['#e1bee7','#ce93d8','#ab47bc','#7b1fa2','#4a148c'],border:'#ddb8e8'},
+  {fg:'#00695c',chipBg:'#e0f2f1',levels:['#b2dfdb','#80cbc4','#26a69a','#00796b','#004d40'],border:'#b2dfdb'},
+  {fg:'#c62828',chipBg:'#ffebee',levels:['#ffcdd2','#ef9a9a','#ef5350','#c62828','#b71c1c'],border:'#f5c6cb'},
+  {fg:'#4527a0',chipBg:'#ede7f6',levels:['#d1c4e9','#b39ddb','#7e57c2','#512da8','#311b92'],border:'#d5caed'},
+  {fg:'#00838f',chipBg:'#e0f7fa',levels:['#b2ebf2','#80deea','#26c6da','#00838f','#006064'],border:'#b2ebf2'},
+];
+
+// ── Utils ──
+function p2(n){ return String(n).padStart(2,'0'); }
+function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate()); }
+function parseTime(s){ const m=s.trim().match(/^(\d{1,2}):(\d{2})$/); if(!m)return null; return parseInt(m[1])*60+parseInt(m[2]); }
+function fmtTime(m){ return p2(Math.floor(m/60))+':'+p2(m%60); }
+function snap10(m){ return Math.round(m/10)*10; }
+function clamp(m){ return Math.max(0, Math.min(24*60, m)); }
+function durStr(m){ if(m<60)return m+'분'; const h=Math.floor(m/60),mm=m%60; return mm===0?h+'h':h+'h'+p2(mm)+'m'; }
+function getPal(idx){ return PALETTES[idx % PALETTES.length]; }
+function getProjById(id){ return state.projects.find(p=>p.id===id); }
+
+// ── Time input: auto zero-pad ──
+function setupTimeInput(id) {
+  const el = document.getElementById(id);
+  el.addEventListener('input', function() {
+    let raw = this.value.replace(/[^0-9:]/g,'');
+    // strip existing colon and reformat
+    const digits = raw.replace(':','');
+    if (digits.length >= 3) {
+      this.value = digits.slice(0,2) + ':' + digits.slice(2,4);
+    } else {
+      this.value = raw;
+    }
+  });
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') addSession();
+  });
+  el.addEventListener('blur', function() {
+    const v = this.value.trim();
+    if (!v) return;
+    // auto zero-pad: "3" → "03:00", "930" → "09:30", "9:3" → "09:03"
+    let digits = v.replace(/\D/g,'');
+    if (digits.length === 0) return;
+    if (digits.length === 1) digits = '0' + digits + '00';       // 3 → 0300
+    else if (digits.length === 2) digits = digits + '00';         // 13 → 1300
+    else if (digits.length === 3) digits = '0' + digits;          // 930 → 0930
+    const h = parseInt(digits.slice(0,2)), mn = parseInt(digits.slice(2,4));
+    const total = h*60 + mn;
+    this.value = fmtTime(clamp(snap10(total)));
+  });
+}
+
+// ── Projects ──
+function showAddProjectModal() {
+  const colorIdx = state.projects.length % PALETTES.length;
+  const pal = getPal(colorIdx);
+  document.getElementById('modalContainer').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <h3>새 프로젝트</h3>
+        <div class="modal-field">
+          <div class="modal-label">프로젝트 이름</div>
+          <input class="modal-input" id="mProjName" placeholder="예) 알고리즘 스터디" maxlength="30" autofocus>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">소유자 / 참여자</div>
+          <input class="modal-input" id="mProjOwner" placeholder="예) 김지수, 박민준" maxlength="50">
+        </div>
+        <div class="modal-btns">
+          <button class="modal-btn" onclick="closeModal()">취소</button>
+          <button class="modal-btn primary" onclick="confirmAddProject()">추가</button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('mProjName').focus();
+  document.getElementById('mProjName').addEventListener('keydown', e => { if(e.key==='Enter') confirmAddProject(); });
+}
+window.confirmAddProject = function() {
+  const name = document.getElementById('mProjName').value.trim();
+  const owner = document.getElementById('mProjOwner').value.trim();
+  if (!name) return;
+  if (state.projects.some(p=>p.name===name)) { closeModal(); return; }
+  const colorIdx = state.projects.length % PALETTES.length;
+  const p = { id:'p'+Date.now(), name, owner, colorIdx, createdDate: todayStr(),
+    _vy: new Date().getFullYear(), _vm: new Date().getMonth() };
+  state.projects.push(p);
+  if (!activeProjectId) activeProjectId = p.id;
+  saveLocal(state);
+  saveProject(p);
+  closeModal();
+  renderAll();
+};
+window.removeProject = function(id) {
+  const proj = getProjById(id);
+  if (!proj) return;
+  showConfirm('"'+proj.name+'" 삭제', '이 프로젝트의 모든 세션도 함께 삭제됩니다.', () => {
+    state.projects = state.projects.filter(p=>p.id!==id);
+    state.sessions = state.sessions.filter(s=>s.projectId!==id);
+    if (activeProjectId===id) activeProjectId = state.projects[0]?.id || null;
+    saveLocal(state);
+    deleteProjectCloud(id);
+    renderAll();
+  });
+};
+window.selectProject = function(id) { activeProjectId = id; renderTags(); };
+
+// ── Sessions ──
+window.addSession = function() {
+  if (!activeProjectId) { alert('프로젝트를 먼저 선택하세요.'); return; }
+  const sv = document.getElementById('startInput').value;
+  const ev = document.getElementById('endInput').value;
+  const s = parseTime(sv), e = parseTime(ev);
+  if (s===null||e===null) { alert('시간 형식: HH:MM  예) 13:30'); return; }
+  const ss = clamp(snap10(s)), ee = clamp(snap10(e));
+  if (ee<=ss) { alert('종료 시간이 시작 시간보다 늦어야 해요.'); return; }
+  const sess = { id:'s'+Date.now(), projectId:activeProjectId, date:todayStr(), start:ss, end:ee, mins:ee-ss };
+  state.sessions.push(sess);
+  saveLocal(state);
+  saveSession(sess);
+  document.getElementById('startInput').value='';
+  document.getElementById('endInput').value='';
+  renderAll();
+};
+window.deleteSession = function(id) {
+  state.sessions = state.sessions.filter(s=>s.id!==id);
+  saveLocal(state);
+  deleteSessionCloud(id);
+  renderAll();
+};
+
+// ── Timer ──
+window.toggleTimer = function() {
+  if (!timerRunning) {
+    if (!activeProjectId) { alert('프로젝트를 먼저 선택하세요.'); return; }
+    timerRunning=true; timerStart=Date.now();
+    timerInterval = setInterval(()=>{
+      const sec=Math.floor((Date.now()-timerStart)/1000);
+      document.getElementById('timerElapsed').textContent=p2(Math.floor(sec/60))+':'+p2(sec%60);
+    },500);
+    document.getElementById('timerBtn').textContent='종료';
+    document.getElementById('timerBtn').classList.add('stop');
+    document.getElementById('timerDot').classList.add('running');
+    document.getElementById('timerInfo').textContent='기록 중...';
+  } else {
+    clearInterval(timerInterval); timerRunning=false;
+    const st=new Date(timerStart), en=new Date();
+    document.getElementById('startInput').value=fmtTime(clamp(snap10(st.getHours()*60+st.getMinutes())));
+    document.getElementById('endInput').value=fmtTime(clamp(snap10(en.getHours()*60+en.getMinutes())));
+    document.getElementById('timerBtn').textContent='시작';
+    document.getElementById('timerBtn').classList.remove('stop');
+    document.getElementById('timerDot').classList.remove('running');
+    document.getElementById('timerElapsed').textContent='00:00';
+    document.getElementById('timerInfo').textContent='타이머 켜고 끄면 시간 자동 입력';
+  }
+};
+
+// ── Render: Tags ──
+function renderTags() {
+  const area = document.getElementById('tagsArea');
+  area.innerHTML = '';
+  state.projects.forEach(p => {
+    const pal = getPal(p.colorIdx);
+    const chip = document.createElement('div');
+    chip.className = 'tag-chip' + (activeProjectId===p.id?' active':'');
+    chip.style.background = pal.chipBg;
+    chip.style.color = pal.fg;
+    chip.onclick = () => selectProject(p.id);
+    chip.innerHTML = '<span class="dot" style="background:'+pal.fg+'"></span>'
+      + p.name
+      + '<button class="del-btn" onclick="event.stopPropagation();removeProject(\''+p.id+'\')" title="삭제">x</button>';
+    area.appendChild(chip);
+  });
+  const form = document.createElement('div');
+  form.className = 'new-tag-form';
+  form.innerHTML = '<button class="icon-btn" onclick="showAddProjectModal()" title="새 프로젝트" style="width:auto;padding:0 10px;gap:5px;">' + ICO.plus + '<span style="font-size:11px">새 프로젝트</span></button>';
+  area.appendChild(form);
+}
+
+// ── Render: Timeline ──
+function renderTimeline() {
+  const today = todayStr();
+  const ts = state.sessions.filter(s=>s.date===today);
+  const scroll = document.getElementById('timelineScroll');
+  const now = new Date();
+  const nowM = now.getHours()*60+now.getMinutes();
+  const nowPct = (nowM-HOUR_START*60)/TOTAL_MINS*100;
+
+  let html = '<div class="tl-header"><div class="tl-label-col"></div><div class="tl-hours">';
+  for(let h=HOUR_START;h<=HOUR_END;h++) html+='<div class="tl-hour-mark">'+(h===24?'00':p2(h))+'</div>';
+  html+='</div></div><div class="tl-grid">';
+  if (!state.projects.length) html+='<div class="empty-msg" style="font-size:11px">프로젝트를 추가하면 타임라인이 표시돼요.</div>';
+  state.projects.forEach(p=>{
+    const pal=getPal(p.colorIdx);
+    const ps=ts.filter(s=>s.projectId===p.id);
+    html+='<div class="tl-row"><div class="tl-proj-label" style="color:'+pal.fg+'">'+p.name+'</div>';
+    html+='<div class="tl-track">';
+    for(let m=0;m<=TOTAL_MINS;m+=30) html+='<div class="tl-tick" style="left:'+(m/TOTAL_MINS*100).toFixed(2)+'%"></div>';
+    if(nowM>=HOUR_START*60&&nowM<=HOUR_END*60) html+='<div class="tl-now-line" style="left:'+nowPct.toFixed(2)+'%"></div>';
+    ps.forEach(s=>{
+      const left=((s.start-HOUR_START*60)/TOTAL_MINS*100).toFixed(2);
+      const width=Math.max(0.5,s.mins/TOTAL_MINS*100).toFixed(2);
+      html+='<div class="tl-block" style="left:'+left+'%;width:'+width+'%;background:'+pal.fg+'">'
+        +'<div class="tl-tip">'+fmtTime(s.start)+' - '+fmtTime(s.end)+' ('+durStr(s.mins)+')</div></div>';
+    });
+    html+='</div></div>';
+  });
+  html+='</div>';
+  scroll.innerHTML=html;
+}
+
+// ── Render: Log ──
+function renderLog() {
+  const today=todayStr();
+  const ss=state.sessions.filter(s=>s.date===today).slice().reverse();
+  const list=document.getElementById('logList');
+  if(!ss.length){list.innerHTML='<div class="empty-msg">아직 기록이 없어요.</div>';return;}
+  list.innerHTML=ss.map(s=>{
+    const proj=getProjById(s.projectId);
+    const pal=proj?getPal(proj.colorIdx):{fg:'#aaa'};
+    return '<div class="log-item">'
+      +'<div class="log-bar" style="background:'+pal.fg+'"></div>'
+      +'<div class="log-time">'+fmtTime(s.start)+' - '+fmtTime(s.end)+'</div>'
+      +'<div class="log-proj" style="color:'+pal.fg+'">'+(proj?proj.name:'?')+'</div>'
+      +'<div class="log-dur">'+durStr(s.mins)+'</div>'
+      +'<button class="log-del" onclick="deleteSession(\''+s.id+'\')" title="삭제">'+ICO.x+'</button>'
+      +'</div>';
+  }).join('');
+}
+
+// ── Render: Grass ──
+function getMinsForDate(pid,dk){
+  return state.sessions.filter(s=>s.projectId===pid&&s.date===dk).reduce((a,s)=>a+s.mins,0);
+}
+function getLevel(m){ if(m===0)return 0;if(m<30)return 1;if(m<60)return 2;if(m<120)return 3;if(m<180)return 4;return 5; }
+
+function buildGrassGrid(p, pal, vy, vm) {
+  const today=todayStr();
+  const daysInMonth=new Date(vy,vm+1,0).getDate();
+  const rawFirst=new Date(vy,vm,1).getDay();
+  const firstMon=(rawFirst+6)%7;
+  const total=firstMon+daysInMonth;
+  const weeks=Math.ceil(total/7);
+
+  const hgrid=Array.from({length:weeks},()=>Array(7).fill(null));
+  for(let d=1;d<=daysInMonth;d++){
+    const idx=firstMon+d-1;
+    hgrid[Math.floor(idx/7)][idx%7]=d;
+  }
+
+  let html='<div class="grass-scroll"><div class="grass-table-h">';
+  html+='<div class="grass-hrow"><div class="grass-week-spacer"></div>';
+  DOW.forEach(d=>{ html+='<div class="grass-dow-h">'+d+'</div>'; });
+  html+='</div>';
+
+  for(let wr=0;wr<weeks;wr++){
+    let wlabel='';
+    for(let dc=0;dc<7;dc++){if(hgrid[wr][dc]!==null){wlabel=hgrid[wr][dc];break;}}
+    html+='<div class="grass-hrow"><div class="grass-week-label">'+wlabel+'</div>';
+    for(let dc=0;dc<7;dc++){
+      const day=hgrid[wr][dc];
+      if(day===null){html+='<div class="grass-cell empty-cell"></div>';continue;}
+      const dk=vy+'-'+p2(vm+1)+'-'+p2(day);
+      const mins=getMinsForDate(p.id,dk);
+      const level=getLevel(mins);
+      const isToday=dk===today;
+      const beforeProj=dk<p.createdDate;
+      let bg,border;
+      if(beforeProj){bg='var(--bg3)';border='transparent';}
+      else if(level===0){bg='var(--bg3)';border='rgba(0,0,0,0.07)';}
+      else{bg=pal.levels[level-1];border=pal.border;}
+      html+='<div class="grass-cell'+(isToday?' today-cell':'')+(beforeProj?' before-proj':'')+'"'
+        +' style="background:'+bg+';border:1px solid '+border+'"'
+        +' onmouseenter="showGTip(event,\''+dk+'\','+mins+')"'
+        +' onmouseleave="hideGTip()"></div>';
+    }
+    html+='</div>';
+  }
+  html+='</div></div>';
+  return html;
+}
+
+function getProjStats(p) {
+  const today = todayStr();
+  const allSess = state.sessions.filter(s=>s.projectId===p.id);
+  const todayMins = allSess.filter(s=>s.date===today).reduce((a,s)=>a+s.mins,0);
+  const totalMins = allSess.reduce((a,s)=>a+s.mins,0);
+  // streak: count consecutive days back from today that have sessions
+  let streak=0;
+  const cur=new Date();
+  for(let i=0;i<365;i++){
+    const dd=new Date(cur); dd.setDate(dd.getDate()-i);
+    const dk=dd.getFullYear()+'-'+p2(dd.getMonth()+1)+'-'+p2(dd.getDate());
+    if(getMinsForDate(p.id,dk)>0) streak++;
+    else break;
+  }
+  // this month session count
+  const d=new Date(); const prefix=d.getFullYear()+'-'+p2(d.getMonth()+1);
+  const monthSess=allSess.filter(s=>s.date.startsWith(prefix)).length;
+  // last 7 days
+  const week=[];
+  for(let i=6;i>=0;i--){
+    const dd=new Date(); dd.setDate(dd.getDate()-i);
+    const dk=dd.getFullYear()+'-'+p2(dd.getMonth()+1)+'-'+p2(dd.getDate());
+    const dow=['S','M','T','W','T','F','S'][dd.getDay()];
+    week.push({dk,dow,mins:getMinsForDate(p.id,dk),isToday:i===0});
+  }
+  return {todayMins,totalMins,streak,monthSess,week};
+}
+
+function buildMiniChart(week, pal) {
+  const maxM = Math.max(...week.map(d=>d.mins), 30);
+  let html='<div class="mini-chart-wrap"><div class="mini-chart-title">최근 7일</div>';
+  html+='<div class="mini-bars">';
+  week.forEach(d=>{
+    const pct = d.mins===0 ? 0 : Math.max(5, Math.round(d.mins/maxM*100));
+    html+='<div class="mini-bar-col">'
+      +'<div class="mini-bar-track">'
+      +'<div class="mini-bar-fill" style="height:'+pct+'%;background:'+(d.isToday?pal.fg:pal.levels[1])+';opacity:'+(d.isToday?1:.75)+';" title="'+d.mins+'분"></div>'
+      +'</div>'
+      +'<div class="mini-bar-label" style="color:'+(d.isToday?pal.fg:'var(--t3)')+'">'+d.dow+'</div>'
+      +'</div>';
+  });
+  html+='</div></div>';
+  return html;
+}
+
+function buildProjBlock(p) {
+  const pal=getPal(p.colorIdx);
+  const vy=p._vy||new Date().getFullYear();
+  const vm=p._vm!==undefined?p._vm:new Date().getMonth();
+  const stats=getProjStats(p);
+  const memo=p.memo||'';
+
+  const todayFmt = stats.todayMins<60
+    ? stats.todayMins+'<span>분</span>'
+    : Math.floor(stats.todayMins/60)+'<span>h</span>'+p2(stats.todayMins%60)+'<span>m</span>';
+  const totalFmt = stats.totalMins===0 ? '0<span>분</span>'
+    : stats.totalMins<60 ? stats.totalMins+'<span>분</span>'
+    : (stats.totalMins/60).toFixed(1)+'<span>h</span>';
+
+  let html='<div class="proj-block-top">';
+
+  // left: today + total
+  html+='<div class="proj-stats-col">'
+    +'<div class="proj-stat-box"><div class="proj-stat-label">오늘</div><div class="proj-stat-value">'+todayFmt+'</div></div>'
+    +'<div class="proj-stat-box"><div class="proj-stat-label">누적</div><div class="proj-stat-value">'+totalFmt+'</div></div>'
+    +'</div>';
+
+  // middle: grass
+  html+='<div class="proj-grass-col">'
+    +'<div class="proj-grass-head">'
+    +'<div class="proj-name-block">'
+    +'<div class="proj-grass-name" style="color:'+pal.fg+'">'+p.name+'</div>'
+    +(p.owner?'<div class="proj-grass-owner"><span style="vertical-align:-1px;margin-right:3px;opacity:.55;display:inline-flex">'+ICO.users+'</span>'+p.owner+'</div>':'')
+    +'</div>'
+    +'<div class="proj-month-nav">'
+    +'<button class="proj-nav-btn" onclick="grassNav(\''+p.id+'\',-1)">'+ICO.chevL+'</button>'
+    +'<span class="proj-month-label">'+vy+'년 '+MONTHS[vm]+'</span>'
+    +'<button class="proj-nav-btn" onclick="grassNav(\''+p.id+'\'\',1)">'+ICO.chevR+'</button>'
+    +'</div>'
+    +'</div>'
+    +buildGrassGrid(p, pal, vy, vm)
+    +'<div class="grass-legend">적음 '
+    +'<div class="legend-sq" style="background:var(--bg3);border:1px solid rgba(0,0,0,0.07)"></div>'
+    +pal.levels.map(lv=>'<div class="legend-sq" style="background:'+lv+'"></div>').join('')
+    +' 많음</div>'
+    +'</div>';
+
+  // right: chart + kpi + memo
+  html+='<div class="proj-right-col">'
+    +buildMiniChart(stats.week, pal)
+    +'<div class="proj-kpi-grid">'
+    +'<div class="proj-kpi-box"><div class="proj-kpi-label">연속</div><div class="proj-kpi-value">'+stats.streak+'<span>일</span></div></div>'
+    +'<div class="proj-kpi-box"><div class="proj-kpi-label">이번달</div><div class="proj-kpi-value">'+stats.monthSess+'<span>회</span></div></div>'
+    +'</div>'
+    +'<div class="proj-memo-box"><div class="proj-memo-label">메모 / 목표</div>'
+    +'<textarea class="proj-memo-input" placeholder="목표나 메모를 적어요..." oninput="saveMemo(\''+p.id+'\',this.value)">'+memo+'</textarea>'
+    +'</div>'
+    +'</div>';
+
+  html+='</div>';
+  return html;
+}
+
+window.saveMemo = function(pid, val) {
+  const p = getProjById(pid); if(!p) return;
+  p.memo = val; saveLocal(state);
+  if(db){ saveProject(p); }
+};
+
+function renderGrass() {
+  const sec=document.getElementById('projectsSection');
+  sec.innerHTML='';
+  state.projects.forEach(p=>{
+    const card=document.createElement('div');
+    card.className='proj-block';
+    card.id='gc-'+p.id;
+    card.innerHTML=buildProjBlock(p);
+    sec.appendChild(card);
+  });
+}
+
+window.grassNav = function(pid, dir) {
+  const p=getProjById(pid); if(!p)return;
+  if(p._vm===undefined){const d=new Date();p._vy=d.getFullYear();p._vm=d.getMonth();}
+  p._vm+=dir;
+  if(p._vm>11){p._vm=0;p._vy++;}
+  if(p._vm<0){p._vm=11;p._vy--;}
+  const card=document.getElementById('gc-'+pid);
+  if(card)card.innerHTML=buildProjBlock(p);
+};
+
+// ── Tooltip ──
+window.showGTip = function(e,dk,mins) {
+  const tt=document.getElementById('gtooltip');
+  const pts=dk.split('-');
+  tt.textContent=parseInt(pts[1])+'월 '+parseInt(pts[2])+'일  '+(mins===0?'기록 없음':durStr(mins));
+  tt.style.display='block';tt.style.left=(e.clientX+12)+'px';tt.style.top=(e.clientY-28)+'px';
+};
+window.hideGTip=function(){document.getElementById('gtooltip').style.display='none';};
+
+// ── Modal helpers ──
+window.showAddProjectModal = showAddProjectModal;
+function showConfirm(title,msg,onOk){
+  document.getElementById('modalContainer').innerHTML=
+    '<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">'
+    +'<h3>'+title+'</h3><p>'+msg+'</p>'
+    +'<div class="modal-btns">'
+    +'<button class="modal-btn" onclick="closeModal()">취소</button>'
+    +'<button class="modal-btn danger" onclick="confirmOk()">삭제</button>'
+    +'</div></div></div>';
+  window._cb=onOk;
+}
+window.closeModal=function(){document.getElementById('modalContainer').innerHTML='';};
+window.confirmOk=function(){closeModal();if(window._cb)window._cb();};
+
+// ── Header ──
+function renderHeader(){
+  const d=new Date();
+  const days=['일','월','화','수','목','금','토'];
+  document.getElementById('headerDate').textContent=
+    d.getFullYear()+'. '+p2(d.getMonth()+1)+'. '+p2(d.getDate())+'. '+days[d.getDay()]+'요일';
+}
+
+// ── Firebase real-time sync ──
+async function setupFirebaseSync() {
+  const ok = await initFirebase();
+  const dot=document.getElementById('fbDot'), label=document.getElementById('fbLabel');
+  if (!ok) { dot.className='fb-dot'; label.textContent='로컬 모드'; return; }
+  dot.className='fb-dot connected'; label.textContent='클라우드 연결됨';
+
+  const { collection, onSnapshot } = window._fs;
+  // Projects
+  onSnapshot(collection(db,"projects"), snap=>{
+    const cloudProjs = snap.docs.map(d=>d.data());
+    // merge: keep _vy/_vm from local if exists
+    cloudProjs.forEach(cp=>{
+      const local=state.projects.find(p=>p.id===cp.id);
+      if(local){cp._vy=local._vy;cp._vm=local._vm;}
+    });
+    state.projects=cloudProjs;
+    if(!activeProjectId&&cloudProjs.length) activeProjectId=cloudProjs[0].id;
+    saveLocal(state); renderAll();
+  });
+  // Sessions
+  onSnapshot(collection(db,"sessions"), snap=>{
+    state.sessions=snap.docs.map(d=>d.data());
+    saveLocal(state); renderAll();
+  });
+}
+
+
+// ── Data export / import ──
+window.exportData = function() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = new Date();
+  a.href = url;
+  a.download = 'study-planner-' + d.getFullYear() + p2(d.getMonth()+1) + p2(d.getDate()) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+window.importData = function() {
+  document.getElementById('importFile').click();
+};
+window.handleImport = function(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (!imported.projects || !imported.sessions) throw new Error('invalid');
+      // restore view state
+      const d = new Date();
+      imported.projects.forEach(p => { if(p._vy===undefined){p._vy=d.getFullYear();p._vm=d.getMonth();} });
+      state = imported;
+      saveLocal(state);
+      activeProjectId = state.projects[0]?.id || null;
+      renderAll();
+    } catch(err) {
+      alert('파일 형식이 올바르지 않아요.');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+};
+
+function renderAll(){
+  renderHeader(); renderTags(); renderTimeline(); renderLog(); renderGrass();
+}
+
+// ── Init ──
+(function init(){
+  state=loadLocal();
+  if(!state.projects)state.projects=[];
+  if(!state.sessions)state.sessions=[];
+  const d=new Date();
+  state.projects.forEach(p=>{ if(p._vy===undefined){p._vy=d.getFullYear();p._vm=d.getMonth();} });
+  if(state.projects.length) activeProjectId=state.projects[0].id;
+  setupTimeInput('startInput');
+  setupTimeInput('endInput');
+  // inject SVG icons into static elements
+  const si = document.getElementById('saveIcon');
+  const li = document.getElementById('loadIcon');
+  if(si) si.innerHTML = ICO.download;
+  if(li) li.innerHTML = ICO.upload;
+  renderAll();
+  setInterval(()=>{ renderTimeline(); renderHeader(); }, 60000);
+  setupFirebaseSync();
+})();
+</script>
+</body>
+</html>
