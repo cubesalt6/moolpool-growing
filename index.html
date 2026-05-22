@@ -243,7 +243,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
     </button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
   </div>
-  <div class="app-footer">v1.1.0</div>
+  <div class="app-footer">v1.2.0</div>
 
 </div>
 <div id="gtooltip"></div>
@@ -291,7 +291,7 @@ async function initFirebase() {
 }
 
 // ── Storage ──
-const LOCAL_KEY = "sp_v5";
+const LOCAL_KEY = "moolpool-growing::v1";
 function loadLocal() {
   try { const r = localStorage.getItem(LOCAL_KEY); return r ? JSON.parse(r) : { projects:[], sessions:[] }; }
   catch(e) { return { projects:[], sessions:[] }; }
@@ -330,7 +330,7 @@ const _memoTimers = {};
 let timerRunning = false, timerStart = null, timerInterval = null;
 
 // ── Nickname ──
-const NICK_KEY = 'sp_nickname';
+const NICK_KEY = 'moolpool-growing::nickname';
 let myNick = localStorage.getItem(NICK_KEY) || '';
 
 function getNick() { return myNick; }
