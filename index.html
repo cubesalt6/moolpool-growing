@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>moolpool</title>
+<title>study.planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -162,6 +162,10 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 .modal-btn.primary:hover{opacity:.85;}
 .modal-btn.danger{color:#c00;border-color:rgba(200,0,0,.2);}
 
+/* nickname */
+.nick-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t3);}
+.nick-badge{font-family:var(--mono);font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;border:1px solid var(--border2);cursor:pointer;color:var(--t2);transition:background .1s;}
+.nick-badge:hover{background:var(--bg3);}
 /* firebase status */
 .fb-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);}
 .fb-dot{width:6px;height:6px;border-radius:50%;background:var(--t4);}
@@ -183,8 +187,9 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
 <div class="app">
 
   <div class="header">
-    <h1>moolpool</h1>
+    <h1>study.planner</h1>
     <div style="display:flex;align-items:center;gap:14px;">
+      <div class="nick-bar"><span style="color:var(--t4)">접속:</span><span class="nick-badge" id="nickBadge" onclick="showNickModal()" title="닉네임 변경">...</span></div>
       <div class="fb-status"><div class="fb-dot" id="fbDot"></div><span id="fbLabel">로컬 모드</span></div>
       <span class="date-badge" id="headerDate"></span>
     </div>
@@ -233,7 +238,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:14px
     <button class="data-btn" onclick="importData()" title="데이터 불러오기 (JSON 파일 열기)"><span id="loadIcon"></span> 불러오기</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
   </div>
-  <div class="app-footer">moolpool v1.0.0 &nbsp;·&nbsp; localStorage + Firebase ready</div>
+  <div class="app-footer">study.planner v1.0.0 &nbsp;·&nbsp; localStorage + Firebase ready</div>
 
 </div>
 <div id="gtooltip"></div>
@@ -257,12 +262,12 @@ const ICO = {
 //  Firebase Console > 프로젝트 설정 > 앱 > firebaseConfig
 // ════════════════════════════════════════
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyBDybpGF6rc3MmLU1riwR9_tz-Ves_w3OQ",
-  authDomain: "moolpool-growing.firebaseapp.com",
-  projectId: "moolpool-growing",
-  storageBucket: "moolpool-growing.firebasestorage.app",
-  messagingSenderId: "860084289772",
-  appId: "1:860084289772:web:3883481f91ced112cda5c9"
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
 };
 // FIREBASE_CONFIG.apiKey 가 "YOUR_API_KEY" 이면 로컬 모드로 동작합니다.
 // ════════════════════════════════════════
@@ -300,7 +305,9 @@ function saveLocal(s) {
 async function saveProject(p) {
   if (!db) return;
   const { doc, setDoc } = window._fs;
-  await setDoc(doc(db, "projects", p.id), p);
+  // strip local-only UI state before cloud save
+  const { _vy, _vm, ...cloudP } = p;
+  await setDoc(doc(db, "projects", p.id), cloudP);
 }
 async function deleteProjectCloud(id) {
   if (!db) return;
@@ -321,7 +328,44 @@ async function deleteSessionCloud(id) {
 // ── App State ──
 let state = { projects:[], sessions:[] };
 let activeProjectId = null;
+const _memoTimers = {};
 let timerRunning = false, timerStart = null, timerInterval = null;
+
+// ── Nickname (local-only, used as createdBy) ──
+const NICK_KEY = 'sp_nickname';
+let myNick = localStorage.getItem(NICK_KEY) || '';
+
+function getNick() { return myNick; }
+function setNick(n) {
+  myNick = n.trim();
+  localStorage.setItem(NICK_KEY, myNick);
+  const badge = document.getElementById('nickBadge');
+  if (badge) badge.textContent = myNick || '이름 없음';
+}
+window.showNickModal = function() {
+  document.getElementById('modalContainer').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <h3>내 닉네임</h3>
+        <div class="modal-field">
+          <div class="modal-label">세션 기록에 표시될 이름</div>
+          <input class="modal-input" id="mNickInput" placeholder="예) 지수" maxlength="20" value="${myNick}">
+        </div>
+        <div class="modal-btns">
+          <button class="modal-btn" onclick="closeModal()">취소</button>
+          <button class="modal-btn primary" onclick="confirmNick()">저장</button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('mNickInput').focus();
+  document.getElementById('mNickInput').addEventListener('keydown', e => { if(e.key==='Enter') confirmNick(); });
+};
+window.confirmNick = function() {
+  const val = document.getElementById('mNickInput').value.trim();
+  if (!val) return;
+  setNick(val);
+  closeModal();
+};
 
 // ── Constants ──
 const HOUR_START = 0, HOUR_END = 24, TOTAL_MINS = 24 * 60;
@@ -411,7 +455,7 @@ window.confirmAddProject = function() {
   if (!name) return;
   if (state.projects.some(p=>p.name===name)) { closeModal(); return; }
   const colorIdx = state.projects.length % PALETTES.length;
-  const p = { id:'p'+Date.now(), name, owner, colorIdx, createdDate: todayStr(),
+  const p = { id:'p'+Date.now()+Math.random().toString(36).slice(2,7), name, owner, colorIdx, createdDate: todayStr(),
     _vy: new Date().getFullYear(), _vm: new Date().getMonth() };
   state.projects.push(p);
   if (!activeProjectId) activeProjectId = p.id;
@@ -443,7 +487,7 @@ window.addSession = function() {
   if (s===null||e===null) { alert('시간 형식: HH:MM  예) 13:30'); return; }
   const ss = clamp(snap10(s)), ee = clamp(snap10(e));
   if (ee<=ss) { alert('종료 시간이 시작 시간보다 늦어야 해요.'); return; }
-  const sess = { id:'s'+Date.now(), projectId:activeProjectId, date:todayStr(), start:ss, end:ee, mins:ee-ss };
+  const sess = { id:'s'+Date.now()+Math.random().toString(36).slice(2,7), projectId:activeProjectId, date:todayStr(), start:ss, end:ee, mins:ee-ss, createdBy: getNick() };
   state.sessions.push(sess);
   saveLocal(state);
   saveSession(sess);
@@ -547,12 +591,14 @@ function renderLog() {
   list.innerHTML=ss.map(s=>{
     const proj=getProjById(s.projectId);
     const pal=proj?getPal(proj.colorIdx):{fg:'#aaa'};
+    const isMine = !s.createdBy || s.createdBy === getNick();
+    const byLabel = s.createdBy ? '<span style="font-size:10px;color:var(--t4);margin-left:4px">' + s.createdBy + '</span>' : '';
     return '<div class="log-item">'
       +'<div class="log-bar" style="background:'+pal.fg+'"></div>'
       +'<div class="log-time">'+fmtTime(s.start)+' - '+fmtTime(s.end)+'</div>'
-      +'<div class="log-proj" style="color:'+pal.fg+'">'+(proj?proj.name:'?')+'</div>'
+      +'<div class="log-proj" style="color:'+pal.fg+'">'+(proj?proj.name:'?')+byLabel+'</div>'
       +'<div class="log-dur">'+durStr(s.mins)+'</div>'
-      +'<button class="log-del" onclick="deleteSession(\''+s.id+'\')" title="삭제">'+ICO.x+'</button>'
+      +(isMine ? '<button class="log-del" onclick="deleteSession(\''+s.id+'\')" title="삭제">'+ICO.x+'</button>' : '<div style="width:20px"></div>')
       +'</div>';
   }).join('');
 }
@@ -686,7 +732,7 @@ function buildProjBlock(p) {
     +'<div class="proj-month-nav">'
     +'<button class="proj-nav-btn" onclick="grassNav(\''+p.id+'\',-1)">'+ICO.chevL+'</button>'
     +'<span class="proj-month-label">'+vy+'년 '+MONTHS[vm]+'</span>'
-    +'<button class="proj-nav-btn" onclick="grassNav(\''+p.id+'\'\',1)">'+ICO.chevR+'</button>'
+    +'<button class="proj-nav-btn" onclick="grassNav(\''+p.id+'\',1)">'+ICO.chevR+'</button>'
     +'</div>'
     +'</div>'
     +buildGrassGrid(p, pal, vy, vm)
@@ -715,7 +761,9 @@ function buildProjBlock(p) {
 window.saveMemo = function(pid, val) {
   const p = getProjById(pid); if(!p) return;
   p.memo = val; saveLocal(state);
-  if(db){ saveProject(p); }
+  // debounce cloud save: only write after 600ms of no input
+  clearTimeout(_memoTimers[pid]);
+  _memoTimers[pid] = setTimeout(() => { if(db) saveProject(p); }, 600);
 };
 
 function renderGrass() {
@@ -783,13 +831,19 @@ async function setupFirebaseSync() {
   // Projects
   onSnapshot(collection(db,"projects"), snap=>{
     const cloudProjs = snap.docs.map(d=>d.data());
-    // merge: keep _vy/_vm from local if exists
-    cloudProjs.forEach(cp=>{
-      const local=state.projects.find(p=>p.id===cp.id);
-      if(local){cp._vy=local._vy;cp._vm=local._vm;}
+    const now = new Date();
+    // merge cloud data with local UI state (_vy/_vm stay local-only)
+    const merged = cloudProjs.map(cp => {
+      const local = state.projects.find(p=>p.id===cp.id);
+      return {
+        ...cp,
+        _vy: local?._vy ?? now.getFullYear(),
+        _vm: local?._vm ?? now.getMonth(),
+        memo: cp.memo ?? local?.memo ?? '',
+      };
     });
-    state.projects=cloudProjs;
-    if(!activeProjectId&&cloudProjs.length) activeProjectId=cloudProjs[0].id;
+    state.projects = merged;
+    if(!activeProjectId && merged.length) activeProjectId = merged[0].id;
     saveLocal(state); renderAll();
   });
   // Sessions
@@ -848,6 +902,9 @@ function renderAll(){
   const d=new Date();
   state.projects.forEach(p=>{ if(p._vy===undefined){p._vy=d.getFullYear();p._vm=d.getMonth();} });
   if(state.projects.length) activeProjectId=state.projects[0].id;
+  // init nickname badge
+  setNick(myNick || '');
+  if (!myNick) setTimeout(showNickModal, 400);
   setupTimeInput('startInput');
   setupTimeInput('endInput');
   // inject SVG icons into static elements
